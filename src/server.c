@@ -87,10 +87,11 @@ int main() {
           buffer[valread] = '\0';
           printf("%s\n", buffer);
 
-          // maybe send message to other client
-          int other = i + (i % 2 == 0 ? -1 : 1);
-          if (other < nfds) {
-            send(pfds[other].fd, buffer, valread, 0);
+          // send message to all other clients
+          for (int j = 1; j < nfds; j++) {
+            if (j != i) {
+              send(pfds[j].fd, buffer, valread, 0);
+            }
           }
         }
         // only process one at a time
